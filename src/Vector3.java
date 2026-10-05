@@ -2,8 +2,8 @@ package src;
 /**
  * A 3D vector with x, y, and z components.
  * @author Ethan Kazenske
- * @version 1.1
- * @since 2026-5-10
+ * @version 1.2
+ * @since 2026-10-05
  * 
  */
 public class Vector3 {
