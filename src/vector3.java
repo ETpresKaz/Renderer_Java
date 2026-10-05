@@ -2,11 +2,11 @@ package src;
 /**
  * A 3D vector with x, y, and z components.
  * @author Ethan Kazenske
- * @version 1.0
+ * @version 1.1
  * @since 2026-5-10
- * vector3
+ * 
  */
-public class vector3 {
+public class Vector3 {
     private double x;
     private double y;
     private double z;
@@ -17,7 +17,7 @@ public class vector3 {
      * @param y The y component of the vector.
      * @param z The z component of the vector.
      */
-    public vector3(double x, double y, double z) {
+    public Vector3(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -26,7 +26,7 @@ public class vector3 {
     /**
      * Constructs a new vector3 with all components set to zero.
      */
-    public vector3() {
+    public Vector3() {
         this(0, 0, 0);
     }
 
@@ -98,8 +98,8 @@ public class vector3 {
      */
     @Override
     public boolean equals(Object o) {
-        if (o instanceof vector3) {
-            vector3 vector3 = (vector3) o;
+        if (o instanceof Vector3) {
+            Vector3 vector3 = (Vector3) o;
             return x == vector3.x && y == vector3.y && z == vector3.z;
         }
         return false;
@@ -108,41 +108,41 @@ public class vector3 {
     /**
      * Adds this vector to another vector.
      * @param other The other vector to add.
-     * @return A new vector3 that is the sum of this vector and the other vector.
+     * @return A new Vector3 that is the sum of this vector and the other vector.
      */
-    public vector3 add(vector3 other) {
-        return new vector3(this.x + other.x, this.y + other.y, this.z + other.z);
+    public Vector3 add(Vector3 other) {
+        return new Vector3(this.x + other.x, this.y + other.y, this.z + other.z);
     }
 
     /**
      * Subtracts another vector from this vector.
      * @param other The other vector to subtract.
-     * @return A new vector3 that is the difference of this vector and the other vector.
+     * @return A new Vector3 that is the difference of this vector and the other vector.
      */
-    public vector3 subtract(vector3 other) {
-        return new vector3(this.x - other.x, this.y - other.y, this.z - other.z);
+    public Vector3 subtract(Vector3 other) {
+        return new Vector3(this.x - other.x, this.y - other.y, this.z - other.z);
     }
 
     /**
      * Multiplies this vector by a scalar.
      * @param scalar The scalar to multiply by.
-     * @return A new vector3 that is the product of this vector and the scalar.
+     * @return A new Vector3 that is the product of this vector and the scalar.
      */
-    public vector3 multiply(double scalar) {
-        return new vector3(this.x * scalar, this.y * scalar, this.z * scalar);
+    public Vector3 multiply(double scalar) {
+        return new Vector3(this.x * scalar, this.y * scalar, this.z * scalar);
     }
 
     /**
      * Divides this vector by a scalar.
      * @param scalar The scalar to divide by.
-     * @return A new vector3 that is the quotient of this vector and the scalar.
+     * @return A new Vector3 that is the quotient of this vector and the scalar.
      * @throws IllegalArgumentException if the scalar is zero.
      */
-    public vector3 divide(double scalar) {
+    public Vector3 divide(double scalar) {
         if (scalar == 0) {
             throw new IllegalArgumentException("Cannot divide by zero");
         }
-        return new vector3(this.x / scalar, this.y / scalar, this.z / scalar);
+        return new Vector3(this.x / scalar, this.y / scalar, this.z / scalar);
     }
 
     /**
@@ -150,17 +150,17 @@ public class vector3 {
      * @param other The other vector to calculate the dot product with.
      * @return The dot product of this vector and the other vector.
      */
-    public double dot(vector3 other) {
+    public double dot(Vector3 other) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
     /**
      * Calculates the cross product of this vector and another vector.
      * @param other The other vector to calculate the cross product with.
-     * @return A new vector3 that is the cross product of this vector and the other vector.
+     * @return A new Vector3 that is the cross product of this vector and the other vector.
      */
-    public vector3 cross(vector3 other) {
-        return new vector3(
+    public Vector3 cross(Vector3 other) {
+        return new Vector3(
                 this.y * other.z - this.z * other.y,
                 this.z * other.x - this.x * other.z,
                 this.x * other.y - this.y * other.x
@@ -180,7 +180,7 @@ public class vector3 {
      * @return A new vector3 that is the normalized version of this vector.
      * @throws IllegalStateException if the vector is a zero vector (magnitude is 0).
      */
-    public vector3 normalize() {
+    public Vector3 normalize() {
         double mag = magnitude();
         if (mag == 0) {
             throw new IllegalStateException("Cannot normalize a zero vector");
