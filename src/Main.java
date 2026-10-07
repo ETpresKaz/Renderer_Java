@@ -1,71 +1,64 @@
 package src;
 import javax.swing.*;
+import java.util.Scanner;
 
 /**
  * The main class for the 3D renderer.
+ * Asks the user which shape to draw, shows it, and keeps asking until they quit.
  * @author Ethan Kazenske
- * @version 1.3
+ * @version 1.4
  * @since 2026-10-05
  */
 class Main {
     public static void main(String[] args) {
-        // Pick which shape to draw. Try swapping in makePyramid().
-        Triangle[] shape = makeCube();
+        Scanner input = new Scanner(System.in);
 
+        // One window that gets reused. Each new shape replaces the old one.
         JFrame frame = new JFrame("Renderer");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new Renderer(shape));
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 
-    /**
-     * Builds a cube out of 12 triangles (2 per face).
-     *
-     * Corner order matters: list each triangle's corners counter-clockwise when
-     * looking at it from outside the shape. That way the renderer knows which
-     * side is the front.
-     * @return The triangles of the cube.
-     */
-    static Triangle[] makeCube() {
-        // The 8 corners of a cube centered at the origin.
-        Vector3 p0 = new Vector3(-1, -1, -1);
-        Vector3 p1 = new Vector3( 1, -1, -1);
-        Vector3 p2 = new Vector3( 1,  1, -1);
-        Vector3 p3 = new Vector3(-1,  1, -1);
-        Vector3 p4 = new Vector3(-1, -1,  1);
-        Vector3 p5 = new Vector3( 1, -1,  1);
-        Vector3 p6 = new Vector3( 1,  1,  1);
-        Vector3 p7 = new Vector3(-1,  1,  1);
+        boolean running = true;
+        while (running) {
+            String choice;
+            Triangle[] shape;
 
-        return new Triangle[] {
-                new Triangle(p0, p3, p2), new Triangle(p0, p2, p1), // back   (z = -1)
-                new Triangle(p4, p5, p6), new Triangle(p4, p6, p7), // front  (z = +1)
-                new Triangle(p0, p4, p7), new Triangle(p0, p7, p3), // left   (x = -1)
-                new Triangle(p1, p2, p6), new Triangle(p1, p6, p5), // right  (x = +1)
-                new Triangle(p3, p7, p6), new Triangle(p3, p6, p2), // top    (y = +1)
-                new Triangle(p0, p1, p5), new Triangle(p0, p5, p4)  // bottom (y = -1)
-        };
-    }
+            // Keep asking until the user types a shape we know, or "quit".
+            do {
+                System.out.println();
+                System.out.println("Pick a shape: cube, pyramid, prism, octahedron, sphere");
+                System.out.print("Or type quit to exit: ");
+                choice = input.nextLine().trim().toLowerCase();
 
-    /**
-     * Builds a square-based pyramid out of 6 triangles (2 for the base, 4 sides).
-     * @return The triangles of the pyramid.
-     */
-    static Triangle[] makePyramid() {
-        Vector3 a = new Vector3(-1, -1, -1);
-        Vector3 b = new Vector3( 1, -1, -1);
-        Vector3 c = new Vector3( 1, -1,  1);
-        Vector3 d = new Vector3(-1, -1,  1);
-        Vector3 top = new Vector3(0, 1, 0);
+                shape = switch (choice) {
+                    case "cube"       -> Shapes.cube();
+                    case "pyramid"    -> Shapes.pyramid();
+                    case "prism"      -> Shapes.prism();
+                    case "octahedron" -> Shapes.octahedron();
+                    case "sphere"     -> Shapes.sphere(12, 24);
+                    default           -> null;
+                };
 
-        return new Triangle[] {
-                new Triangle(a, b, c), new Triangle(a, c, d), // base
-                new Triangle(a, top, b),                      // side facing -z
-                new Triangle(b, top, c),                      // side facing +x
-                new Triangle(c, top, d),                      // side facing +z
-                new Triangle(d, top, a)                       // side facing -x
-        };
+                if (shape == null && !choice.equals("quit")) {
+                    System.out.println("\"" + choice + "\" isn't a shape. Try again.");
+                }
+            } while (shape == null && !choice.equals("quit"));
+
+            if (choice.equals("quit")) {
+                running = false;
+            } else {
+                // Swap the new shape into the window and show it.
+                frame.getContentPane().removeAll();
+                frame.add(new Renderer(shape));
+                frame.pack();
+                frame.setLocationRelativeTo(null);
+                frame.setVisible(true);
+                System.out.println("Showing a " + choice + ".");
+            }
+        }
+
+        System.out.println("Goodbye <3");
+        input.close();
+        frame.dispose();
+        System.exit(0);
     }
 }
