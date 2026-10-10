@@ -13,11 +13,21 @@ java src.Main
 
 Run both commands from the project root (the folder that contains `src`).
 
+The program asks which shape to draw in the terminal:
+
+```
+Pick a shape: cube, pyramid, prism, octahedron, sphere
+Or type quit to exit:
+```
+
+Type a shape name and it appears spinning in a window. You can keep typing new shape names to swap the shape in the same window. Type `quit` to exit.
+
 ## Project layout
 
 | File | What it does |
 |------|--------------|
-| `src/Main.java` | Opens the window and builds the shapes (`makeCube`, `makePyramid`) out of triangles. |
+| `src/Main.java` | Asks which shape to draw, then shows it in a window. Keeps asking until you type `quit`. |
+| `src/Shapes.java` | Builds the shapes out of triangles: `cube`, `pyramid`, `prism`, `octahedron`, and `sphere` (generated from rings and segments). |
 | `src/Renderer.java` | The renderer. Rotates, culls, lights, projects and draws the triangles every frame. |
 | `src/Triangle.java` | A triangle: three `Vector3` corners. Every shape is built from these. |
 | `src/Vector3.java` | A 3D vector with math helpers (`add`, `subtract`, `dot`, `cross`, `normalize`, ...). |
@@ -38,7 +48,12 @@ Every shape is a list of triangles. About 60 times per second, the renderer does
 
 ## Making your own shapes
 
-Add a method to `Main` that returns a `Triangle[]`, like `makeCube()` does. One rule matters: **list each triangle's corners counter-clockwise as seen from outside the shape.** The renderer uses that order to figure out which side is the front. If a face goes missing, its corners are probably in the wrong order. Swap two of them.
+1. Add a method to `Shapes` that returns a `Triangle[]`, like `Shapes.cube()` does. Keep the shape centered at the origin and roughly between -1 and 1 so it fits the camera.
+2. Add a `case` for it to the `switch` in `Main`, and add its name to the "Pick a shape" prompt.
+
+One rule matters: **list each triangle's corners counter-clockwise as seen from outside the shape.** The renderer uses that order to figure out which side is the front. If a face goes missing, its corners are probably in the wrong order. Swap two of them.
+
+For round or repetitive shapes, calculate the corners in a loop instead of typing them out. `Shapes.sphere()` is an example: it builds a grid of points like latitude and longitude lines, then fills each grid square with two triangles.
 
 ## Things to tweak
 
@@ -46,6 +61,7 @@ Add a method to `Main` that returns a `Triangle[]`, like `makeCube()` does. One 
 - `LIGHT`: move the light around.
 - `BASE_COLOR`: change the shape's color.
 - `angle += 0.02`: change the spin speed.
+- `Shapes.sphere(12, 24)` in `Main.java`: more rings and segments make a rounder sphere, but it's slower to draw.
 
 ## Ideas for what's next
 
